@@ -1,0 +1,40 @@
+{{- /* Generate the search index. */ -}}
+{{- $index := slice -}}
+{{- $pages := where .Site.Pages "Section" "!=" "home" -}}
+
+{{- range $pages -}}
+  {{- /* Do not index drafts or private pages. */ -}}
+  {{- if and (not .Draft) (not .Params.private) -}}
+
+    {{- /* Generate page description. */ -}}
+    {{- $desc := "" -}}
+    {{- if .Params.summary -}}
+      {{- $desc = .Params.summary -}}
+    {{- else -}}
+      {{- $desc = .Summary -}}
+    {{- end -}}
+
+    {{- /* Get the author id, name, and avatar */ -}}
+    {{- $authors := slice -}}
+    {{- range .Params.authors -}}
+      {{- with $.Site.GetPage (printf "/authors/%s" (urlize .)) -}}
+        {{- $avatar := string "" -}}
+        {{- with (.Resources.ByType "image").GetMatch "*avatar*" -}}
+          {{- $avatar = .RelPermalink -}}
+        {{- end -}}
+        {{- $author := dict "id" .Params.id "name" .Params.name "avatar" $avatar "relpermalink" .RelPermalink -}}
+        {{- $authors = $authors | append $author -}}
+      {{- end -}}
+    {{- end -}}
+
+    {{- $title := .Title}}
+    {{- $rel_permalink := .RelPermalink -}}
+    {{- $permalink := .Permalink -}}
+
+    {{- /* Add page to index. */ -}}
+    {{- $index = $index | append (dict "reading_time" .ReadingTime "date_str" (.Date.Format "Jan 2, 2006") "objectID" .UniqueID "date" (.Date.Format "2006-01-02T15:04:05Z07:00" | safeHTML) "publishdate" .PublishDate "lastmod" .Lastmod.UTC.Unix "lang" .Lang "permalink" $permalink "relpermalink" $rel_permalink "title" $title "summary" (plainify $desc) "authors" $authors "kind" .Kind "type" .Type "section" .Section "tags" .Params.Tags) -}}
+
+  {{- end -}}
+{{- end -}}
+
+{{- $index | jsonify -}}

@@ -1,0 +1,34 @@
+<article class="post {{ .Section }}">
+    <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+    <footer class="post-meta">
+            {{ if or .Params.authors .Site.Params.author}}
+            <div class="authors post-meta-row">
+                {{ range $index, $author := .Params.authors }}
+                    <span class="author">
+                    {{ with $.Site.GetPage (printf "/authors/%s" (urlize $author)) }}
+                        <a href="{{.RelPermalink}}">
+                        {{with (.Resources.ByType "image").GetMatch "*avatar*" }}
+                            <img class="author-thumb" src="{{.RelPermalink}}" alt="Author image" nopin="nopin" />
+                        {{end}}
+                        {{.Params.name}}
+                        </a>
+                    {{end}}
+                    </span>
+                {{ end }}
+            </div>
+            {{end}}
+        <div class="post-meta-row">
+            <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" | safeHTML }}">
+                {{ .Date.Format "January 2, 2006" }}
+            </time>
+        </div>
+        <div class="post-meta-row">
+        {{if .Params.tags }}
+            {{ $num_tags := len .Params.tags }}
+            {{ range $index, $tag := .Params.tags }}
+                <a href="{{$.Site.BaseURL}}/tags/{{ $tag | urlize }}/">#{{ $tag }}</a>{{if lt $index (sub $num_tags 1)}},{{end}}
+            {{ end }}
+        {{end}}
+        </div>
+    </footer>
+</article>

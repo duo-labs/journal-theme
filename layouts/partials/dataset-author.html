@@ -1,0 +1,14 @@
+{{ if or .Params.authors .Site.Params.author}}
+{{ range $index, $author := .Params.authors }}
+    <span class="author">
+    {{ with $.Site.GetPage (printf "/authors/%s" (urlize $author)) }}
+        <a href="{{.RelPermalink}}">
+        {{with (.Resources.ByType "image").GetMatch "*avatar*" }}
+            <img class="author-thumb" src="{{.RelPermalink}}" alt="Author image" nopin="nopin" />
+        {{end}}
+        {{.Params.name}}
+        </a>
+    {{end}}
+    </span>
+{{ end }}
+{{end}}

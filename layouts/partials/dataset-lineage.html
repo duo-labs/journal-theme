@@ -1,0 +1,29 @@
+{{ $id := (path.Base .Dir) }}
+{{ $format := .Params.format }}
+<div class="mermaid datasets-lineage">
+graph LR
+    classDef this_dataset fill:#b3e5fc
+    classDef source fill:#ffccbc
+    classDef journal-post fill:#fff9c4
+{{ if .Params.sources }}
+{{ range $idx, $val := .Params.sources }}
+{{ range $type, $source_id := $val }}
+    {{ if eq $type "database" }}
+    source{{ $idx }}[fa:fa-database {{$source_id}}] --> _this_dataset[fa:fa-table {{ $id }}]
+    {{ else if eq $type "dataset" }}
+    source{{ $idx }}[fa:fa-table {{$source_id}}] --> _this_dataset[fa:fa-table {{ $id }}]
+    click source{{ $idx }} "/datasets/{{ $source_id }}"
+    {{ else }}
+    source{{ $idx }}[fa:fa-warn {{ $source_id }}] --> _this_dataset[fa:fa-table {{ $id }}]
+    {{ end }}
+    class source{{ $idx }} source;
+{{ end }}
+{{ end }}
+{{ end }}
+    class _this_dataset this_dataset;
+{{ range $idx, $page := .Pages }}
+    _this_dataset[fa:fa-table {{ $id }}] --> journal_post{{$idx}}[fa:fa-book {{ $page.Title }}]
+    click journal_post{{$idx}} "{{ .RelPermalink }}"
+    class journal_post{{$idx}} journal-post
+{{ end}}
+</div>

@@ -1,0 +1,51 @@
+
+<script> 
+// TODO: Move to an actual script file and make it less lazy
+let CELL_VISIBILITY_STATE = false
+let CELL_CLASSES = {
+    "jupyter": ".language-python",
+    "rmarkdown": ".language-r"
+}
+let NOTEBOOK = "{{ .Params.notebook }}"
+let CELL_CLASS = CELL_CLASSES[NOTEBOOK]
+
+function setCellVisibility(el, visibility) {
+    if (visibility == undefined) {
+        visibility = el.style.display == "block"
+        visibility = !visibility
+    }
+    let btn = el.parentElement.querySelector("button")
+    el.style.display=(visibility ? "block" : "none"); 
+    btn.innerText=(visibility ? "Hide cell" : "Show cell");
+}
+
+function toggleAllVisibility(e) {
+    let btn = e.target;
+    CELL_VISIBILITY_STATE = !CELL_VISIBILITY_STATE
+    btn.innerText = (CELL_VISIBILITY_STATE ? "Hide all cells" : "Show all cells")
+    document
+        .querySelectorAll(CELL_CLASS)
+        .forEach(el => setCellVisibility(el, CELL_VISIBILITY_STATE))
+}
+
+window.onload = (ev) => {
+    document.querySelectorAll(CELL_CLASS).forEach((el) => { 
+        el.style.display = "none";
+
+        let btn = document.createElement("button"); 
+        btn.innerText="Show cell"; 
+        btn.onclick = () => setCellVisibility(el);
+        btn.className = "notebook-cell-button"
+        
+        el.parentElement.appendChild(btn) 
+    })
+}
+
+</script>
+
+<style>pre { overflow: scroll} pre code { display:block; width: 1000px }</style>
+<div class="datasets-single post-meta">
+    <h3>{{ .Params.notebook }} utilities</h3>
+    <button onClick="toggleAllVisibility(event)" class="notebook-cell-button">Show all code cells</button>
+</div>
+

@@ -1,0 +1,27 @@
+{{ if not .Params.deprecated }}
+<article class="post {{ .Section }}">
+    <header class="post-header">
+        <h2 class="post-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+    </header>
+    <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" | safeHTML }}">
+            {{ .Date.Format "January 2, 2006" }}
+    </time>
+    <section class="post-excerpt">
+        {{if .Params.excerpt }}
+        <p>{{ .Params.excerpt }}</p>
+        {{else}}
+        <p>{{ .Summary }}</p><p>
+        {{end}}
+    </section>
+    <footer class="post-meta">  
+        <p>
+            {{ partial "dataset-author.html" . }}
+        </p>
+        <p>
+        {{ range .Pages }}
+        <i class="icon-book"></i> <a href="{{ .RelPermalink }}">{{ .Title }}</a><br>
+        {{ end }}
+        </p>
+    </footer>
+</article>
+{{ end }}

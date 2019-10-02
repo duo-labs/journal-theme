@@ -1,0 +1,41 @@
+{{ partial "header.html" . }}
+
+<!--
+    This is the HTML that's rendered for a single dataset. It includes the
+    information about the dataset itself, as well as what posts leverage
+    the dataset.
+
+    For now this is pretty boilerplate from the other pages - we can change the
+    layout and format as needed.
+-->
+<main class="content datasets-detail" role="main">
+    <article class="post">
+        <header class="post-header">
+            <h1 class="post-title">{{.Name}}</h1>
+        </header>
+        {{ partial "dataset-lineage.html" . }}
+        {{.Content}}
+    </article>
+    <article class="sidebar">
+        <h3>Metadata</h3>
+        {{ partial "dataset-metadata.html" . }}
+        {{ if or .Params.schema .Params.schema_description }}
+        {{ partial "dataset-schema.html" . }}
+        {{ end }}
+        <h3>Versions</h3>
+        {{ $dir := .Dir }}
+        {{ $versions := sort (readDir (printf "content/%s" $dir)) }}
+        <ul>
+        {{ range $versions }}
+            {{ if eq .Name "_index.md" }}
+            <li>Current</li>
+            {{ else }}
+            {{ $basename := replace .Name ".md" "" }}
+            <li><a href="/{{$dir}}{{$basename}}">{{$basename}}</a></li>
+            {{ end }}
+        {{ end }}
+        </ul>
+    </article>
+</main>
+
+{{ partial "footer.html" . }}

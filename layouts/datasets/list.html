@@ -1,0 +1,22 @@
+{{ partial "header.html" . }}
+
+<main class="content datasets-list" role="main">
+    {{.Content}}
+    {{ $paginator := .Paginator }}
+
+	<div class="extra-pagination inner">
+    {{ partial "pagination.html" $paginator }}
+	</div>
+
+    <div class="grid">
+	{{ range $index, $page := $paginator.Pages }}
+	   {{ partial "dataset-li.html" . }}
+	{{ end }}
+    </div>
+
+	{{ partial "pagination.html" $paginator }}
+</main>
+
+
+
+{{ partial "footer.html" . }}

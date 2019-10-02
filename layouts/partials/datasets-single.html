@@ -1,0 +1,9 @@
+
+<div class="datasets-single post-meta">
+<h3>Datasets</h3>
+{{ range $index, $dataset := .Params.datasets }}
+    {{ with $.Site.GetPage (printf "/datasets/%s" (urlize $dataset)) }}
+    <i class="fa fa-table"></i> <a href="{{.RelPermalink}}">{{.Params.title}}</a> <br>
+    {{end}}
+{{ end }}
+</div>

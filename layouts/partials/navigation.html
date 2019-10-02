@@ -1,0 +1,57 @@
+<!--
+<div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        {{ $currentNode := . }}
+        {{with .Site.Menus.main}}
+        {{ range sort . "Weight" "desc"}}
+            {{.Pre}}
+            <li class="nav-opened{{if or ($currentNode.IsMenuCurrent "main" .) ($currentNode.HasMenuCurrent "main" .)}} nav-current{{end}}" role="presentation">
+            	<a href="{{.URL}}">{{.Name}}</a>
+            </li>
+        {{end}}
+        {{end}}
+    </ul>
+
+    {{ if .Site.Params.RSSLink}}
+    <a class="subscribe-button icon-feed" href="{{.Site.Params.RSSLink }}">Subscribe</a> </div>
+    {{else}}
+    <a class="subscribe-button icon-feed" href="{{if .IsNode}}{{.RSSLink}}{{else}}{{"index.xml" | relURL}}{{end}}">Subscribe</a>
+    {{end}}
+</div>
+<span class="nav-cover"></span>
+-->
+{{if .Params.cover}}
+    {{if or (eq (substr .Params.cover 0 7) "http://") (eq (substr .Params.cover 0 8) "https://")}}
+    <header class="main-header post-head" style="background-image: url({{.Params.cover}})">
+    {{ else }}
+    <header class="main-header post-head" style="background-image: url({{.Params.cover | relURL}})">
+    {{ end }}
+{{else}}
+    <header class="main-header no-cover">
+{{end}}
+    <nav class="main-nav overlay clearfix">
+        {{ if .Site.Params.logo }}
+            <a class="blog-logo" href="{{ .Site.BaseURL }}"><img src="{{ .Site.Params.logo  | relURL}}" alt="Blog Logo" /></a>
+        {{end}}
+        {{ if .Site.Menus.main }}
+            <a class="menu-button" href="#"><span class="burger">&#9776;</span><span class="word">Menu</span></a>
+        {{end}}
+        <a class="menu-button icon-button icon-search" href="/search" >&nbsp;&nbsp;Search</a>
+        {{ partial "taxonomy-switcher.html" . }}
+    </nav>
+    <!-- TODO :)
+    <div class="vertical">
+        <div class="main-header-content inner">
+            <h1 class="page-title">{{.Title}}</h1>
+            <h2 class="page-description">
+                {{if .Params.description}}
+                    {{.Params.description}}
+                {{end}}
+            </h2>
+        </div>
+    </div>-->
+</header>

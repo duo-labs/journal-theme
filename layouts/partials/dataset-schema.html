@@ -1,0 +1,39 @@
+{{ if .Params.schema }}
+<h3>Schema </h3>
+    <table class="schema">
+    <tbody>
+    {{ range $idx, $entry := .Params.schema }}
+        {{ range $field, $desc := $entry }}
+        {{ $type := findRE "^.*\\[" $desc }}
+        {{ if $type }}
+            {{ $type := replaceRE "\\[" "" (index $type 0) }}
+            {{ $desc := index (findRE "\\[.*\\]" $desc) 0 }}
+            {{ $desc := trim $desc "\\[\\]"  }}
+            <tr>
+                <td class="field">{{ $field }} 
+                    <span class="type">{{ $type }} </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="description">{{ $desc }}</td>
+            </tr>
+        {{ else }}
+            <tr>
+                <td class="field">{{ $field }} 
+                    <span class="type">{{ $desc }} </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="description">(no description)</td>
+            </tr>
+        {{ end }}
+        {{ end }}
+    {{ end }}
+    </tbody>
+    </table>
+{{ else if .Params.schema_description }}
+<h3>Schema Description</h3>
+    <pre>
+        {{- .Params.schema_description -}}
+    </pre>
+{{ end }}

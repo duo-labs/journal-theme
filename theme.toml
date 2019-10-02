@@ -1,0 +1,19 @@
+name = "Journal Theme"
+license = "BSD-3 Clause"
+licenseLink = "https://github.com/duo-labs/journal-theme/blob/master/LICENSE"
+homepage = "https://duo-labs.github.io/journal/"
+tags = ["blog", "research"]
+features = ["disqus", "google analytics","share"]
+min_version=0.25
+
+[outputs]
+  home = [ "HTML", "JSON", "RSS"]
+
+[author]
+  name = "Duo Labs"
+  homepage = "https://duo.com/labs"
+
+[original]
+  name = "Casper"
+  homepage = "http://vjeantet.fr/"
+  repo = "https://github.com/vjeantet/hugo-theme-casper"

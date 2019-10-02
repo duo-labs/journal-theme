@@ -1,0 +1,37 @@
+{{ if not .Params.noauthor }}
+  {{ if or .Params.authors .Site.Params.author}}
+
+    {{ $multiple_authors := "false" }}
+    {{ if gt (len .Params.authors) 1 }}
+      {{ $multiple_authors = "true" }}
+    {{end}}
+
+    {{ range $index, $author := .Params.authors }}
+      {{ with $.Site.GetPage (printf "/authors/%s" (urlize $author)) }}
+        {{with (.Resources.ByType "image").GetMatch "*avatar*" }}
+          {{ if eq $multiple_authors "false" }}
+          <figure class="author-image">
+            <a class="img" href="{{$.Site.BaseURL}}" style="background-image: url({{.RelPermalink}})"><span class="hidden">{{.Params.name}}'s Picture</span></a>
+          </figure>
+          {{ end }}
+        {{end}}
+
+        <div class="author-section">
+          {{with (.Resources.ByType "image").GetMatch "*avatar*" }}
+            {{ if eq $multiple_authors "true" }}
+              <img class="author-inline-image" href="{{$.Site.BaseURL}}" src="{{.RelPermalink}}"/><span class="hidden">{{.Params.name}}'s Picture</span></a>
+            {{ end }}
+          {{ end }}
+          <section class="author">
+              <h4><a href="{{.RelPermalink}}">{{.Params.name}}</a></h4>
+              {{if .Params.bio}}
+                <p>{{.Params.bio}}</p>
+              {{else}}
+                <p class="no-print">Read <a href="{{.RelPermalink}}">more posts</a> by this author.</p>
+              {{end}}
+          </section>
+        </div>
+      {{end}}
+    {{end}}
+  {{end}}
+{{end}}

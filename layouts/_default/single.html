@@ -1,0 +1,80 @@
+{{ partial "header.html" . }}
+
+<main class="content" role="main">
+    {{ .TableOfContents }}
+
+
+
+  <article class="post {{ .Section }}">
+
+    <header class="post-header">
+        <h1 class="post-title">{{.Title}}</h1>
+        <small>{{.Description}}</small>
+        {{ if .Params.draft }}
+          <label class="label-draft">Draft</label>
+        {{ end }}
+        <section class="post-meta">
+            {{ if or .Params.authors .Site.Params.author}}
+            <div class="authors post-meta-row">
+                {{ range $index, $author := .Params.authors }}
+                    <span class="author">
+                    {{ with $.Site.GetPage (printf "/authors/%s" (urlize $author)) }}
+                        <a href="{{.RelPermalink}}">
+                        {{with (.Resources.ByType "image").GetMatch "*avatar*" }}
+                            <img class="author-thumb" src="{{.RelPermalink}}" alt="Author image" nopin="nopin" />
+                        {{end}}
+                        {{.Params.name}}
+                        </a>
+                    {{end}}
+                    </span>
+                {{ end }}
+            </div>
+            {{end}}
+        {{ if eq .Section "post"}}
+          <div>
+            <time class="post-date" datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" | safeHTML }}">
+              {{ .Date.Format "Jan 2, 2006" }},
+            </time>
+            {{.ReadingTime}} minute read
+          </div>
+        {{end}}
+          <div>
+          {{ range .Params.tags }}
+            <span class="post-tag small"><a href="{{$.Site.BaseURL}}/tags/{{ . | urlize }}/">#{{ . }}</a></span>
+          {{ end }}
+          </div>
+
+        </section>
+        {{ if .Params.datasets }}
+            {{ partial "datasets-single.html" . }}
+        {{ end }}
+
+        {{ if .Params.notebook }}
+            {{ partial "notebook.html" . }}
+        {{ end }}
+    </header>
+
+    <section class="post-content">
+        {{ .Content }}
+    </section>
+
+
+  <footer class="post-footer">
+
+
+    {{ partial "author.html" . }}
+
+    {{ partial "share.html" . }}
+
+    {{ partial "disqus.html" . }}
+
+  </footer>
+</article>
+
+</main>
+
+{{if not .Params.hideSuggestions }}
+  {{ partial "suggestions.html" . }}
+{{ end }}
+
+{{ partial "footer.html" . }}

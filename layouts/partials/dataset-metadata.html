@@ -1,0 +1,61 @@
+<table class="basic-metadata">
+        <tbody>
+        <tr>
+            <td>Name</td>
+            <td>
+                <input value="{{ path.Base .Dir }}">
+            </td>
+        </tr>
+        <tr>
+            <td>Author</td>
+            <td>
+                {{ partial "dataset-author.html" . }}
+            </td>
+        </tr>   
+        <tr>
+            <td>Location</td>
+            <td class="location">
+                {{ if .Params.location }}
+                <input value="{{ .Params.location }}" readonly>
+                {{ else }}
+                <i class="icon-warning float-right"></i> Location missing
+                {{ end }}
+            </td>
+        </tr>
+        <tr>
+            <td>Date</td>
+            <td>
+                <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" | safeHTML }}">
+                        {{ .Date.Format "January 2, 2006" }}
+                </time>
+            </td>
+        </tr>
+        <tr>
+                <td>Hash</td>
+                <td>
+                        <input value="{{ .Params.md5_hash }}" readonly>
+                </td>
+            </tr>
+        <tr>
+            <td>Format</td>
+            <td>
+                {{ if .Params.format }}
+                {{.Params.format}}
+                {{ else }}
+                <i class="icon-warning float-right"></i> Format missing
+                {{ end }}
+            </td>
+        </tr>
+        {{if .Params.tags}}
+        <tr>
+            <td>Tags</td>
+            <td>
+                {{ $num_tags := len .Params.tags }}
+                {{ range $index, $tag := .Params.tags }}
+                    <a href="{{$.Site.BaseURL}}/tags/{{ $tag | urlize }}/">#{{ $tag }}</a>{{if lt $index (sub $num_tags 1)}},{{end}}
+                {{ end }}
+            </td>
+        </tr>
+        {{end}}
+        </tbody>
+    </table>
