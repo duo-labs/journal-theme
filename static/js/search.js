@@ -144,7 +144,7 @@ let fuseOptions = {
   
   if (typeof Fuse === 'function') {
   // Wait for Fuse to initialize.
-    $.getJSON("/index.json", function (search_index) {
+    $.getJSON("../index.json", function (search_index) {
       let fuse = new Fuse(search_index, fuseOptions);
   
       // On page load, check for search query in URL.
