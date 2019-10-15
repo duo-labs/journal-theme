@@ -1168,7 +1168,7 @@ body.nav-opened .menu-button .word {
 }
 
 .no-cover.main-header {
-    min-height: 90px;
+    height: 90px;
     background: white;
 }
 
@@ -1821,10 +1821,8 @@ body:not(.post-template) .post-title {
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
-        height: auto;
-        min-height: 240px;
-        height: 60vh;
-        padding: 15% 0;
+        height: 90px;
+        padding: 30px 0;
     }
 
     .scroll-down,
